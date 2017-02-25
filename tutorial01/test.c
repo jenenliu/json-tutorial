@@ -69,9 +69,6 @@ static void test_parse_root_not_singular() {
     v.type = LEPT_FALSE;
     EXPECT_EQ_INT(LEPT_PARSE_ROOT_NOT_SINGULAR, lept_parse(&v, "null x"));
     EXPECT_EQ_INT(LEPT_NULL, lept_get_type(&v));
-
-    EXPECT_EQ_INT(LEPT_PARSE_ROOT_NOT_SINGULAR, lept_parse(&v, "true x"));
-    EXPECT_EQ_INT(LEPT_NULL, lept_get_type(&v));
 }
 
 static void test_parse() {
