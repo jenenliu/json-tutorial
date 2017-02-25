@@ -18,11 +18,18 @@ static void lept_parse_whitespace(lept_context* c) {
 }
 
 static int lept_parse_null(lept_context* c, lept_value* v) {
-  /* if the first character of c.json is not 'n', then warn */
+    /* if the first character of c.json is not 'n', then warn */
     EXPECT(c, 'n');
     if (c->json[0] != 'u' || c->json[1] != 'l' || c->json[2] != 'l')
         return LEPT_PARSE_INVALID_VALUE;
     c->json += 3;
+
+    if (c->json[0] != '\0'){
+      lept_parse_whitespace(c);
+      if (c->json[0] != '\0')
+        return LEPT_PARSE_ROOT_NOT_SINGULAR;
+    }
+
     v->type = LEPT_NULL;
     return LEPT_PARSE_OK;
 }
@@ -32,6 +39,13 @@ static int lept_parse_true(lept_context* c, lept_value* v) {
   if (c->json[0] != 'r' || c->json[1] != 'u' || c->json[2] != 'e')
     return LEPT_PARSE_INVALID_VALUE;
   c->json += 3;
+
+  if (c->json[0] != '\0') {
+    lept_parse_whitespace(c);
+    if (c->json[0] != '\0')
+      return LEPT_PARSE_ROOT_NOT_SINGULAR;
+  }
+
   v->type = LEPT_TRUE;
   return LEPT_PARSE_OK;
 }
@@ -42,6 +56,13 @@ static int lept_parse_false(lept_context* c, lept_value* v) {
       || c->json[3] != 'e')
     return LEPT_PARSE_INVALID_VALUE;
   c->json += 4;
+
+  if (c->json[0] != '\0') {
+    lept_parse_whitespace(c);
+    if (c->json[0] != '\0')
+      return LEPT_PARSE_ROOT_NOT_SINGULAR;
+  }
+
   v->type = LEPT_FALSE;
   return LEPT_PARSE_OK;
 }
